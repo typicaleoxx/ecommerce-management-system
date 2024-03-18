@@ -1,0 +1,90 @@
+# Ecommerce Management System ORM Diagram
+
+## Authentication and Registration
+- User
+  - id: Integer (Primary Key)
+  - username: String (Unique)
+  - email: String (Unique)
+  - password: String
+  - first_name: String
+  - last_name: String
+  - is_active: Boolean
+  - is_staff: Boolean
+  - date_joined: DateTime
+
+## Product Catalog
+- Category
+  - id: Integer (Primary Key)
+  - name: String
+
+- Subcategory
+  - id: Integer (Primary Key)
+  - name: String
+  - category: ForeignKey(Category)
+
+- Product
+  - id: Integer (Primary Key)
+  - name: String
+  - description: Text
+  - price: Decimal
+  - quantity: Integer
+  - image: ImageField
+  - category: ForeignKey(Category)
+  - subcategory: ForeignKey(Subcategory)
+
+## Shopping Cart
+- Cart
+  - id: Integer (Primary Key)
+  - user: OneToOneField(User)
+  - created_at: DateTime
+
+- CartItem
+  - id: Integer (Primary Key)
+  - cart: ForeignKey(Cart)
+  - product: ForeignKey(Product)
+  - quantity: Integer
+
+## Checkout Process
+- ShippingInformation
+  - id: Integer (Primary Key)
+  - user: ForeignKey(User)
+  - address: Text
+  - contact_number: String
+  - delivery_method: String
+  - created_at: DateTime
+
+- Order
+  - id: Integer (Primary Key)
+  - user: ForeignKey(User)
+  - items: ManyToManyField(Product)
+  - total_price: Decimal
+  - shipping_info: ForeignKey(ShippingInformation)
+  - status: String (Pending, Processing, Shipped, Delivered)
+  - created_at: DateTime
+
+## Order Management
+- OrderHistory
+  - id: Integer (Primary Key)
+  - order: ForeignKey(Order)
+  - status: String (Pending, Processing, Shipped, Delivered)
+  - updated_at: DateTime
+
+## User Reviews and Ratings
+- Review
+  - id: Integer (Primary Key)
+  - user: ForeignKey(User)
+  - product: ForeignKey(Product)
+  - rating: Integer
+  - comment: Text
+  - created_at: DateTime
+
+## Admin Dashboard
+- AdminUser
+  - id: Integer (Primary Key)
+  - user: ForeignKey(User)
+  - is_admin: Boolean
+
+- Inventory
+  - id: Integer (Primary Key)
+  - product: ForeignKey(Product)
+  - quantity: Integer
